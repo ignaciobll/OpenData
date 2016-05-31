@@ -13,6 +13,7 @@ fieldnames = ['totalVehiculosTunel', 'totalVehiculosTunelCalle30',
 
 last_time_request = ""
 
+
 def new_values(writer, last_time_request):
     r = requests.get(url, headers=headers)
     o = xmltodict.parse(r.text)
@@ -39,4 +40,4 @@ with open('test.csv', 'w') as csvfile:
     writer.writeheader()
     while True:
         last_time_request = new_values(writer, last_time_request)
-        time.sleep(10)
+        time.sleep(240)
