@@ -3,6 +3,7 @@ import requests
 import json
 import csv
 import time
+from time import gmtime, strftime
 
 url = "http://www.mc30.es/images/xml/DatosTrafico.xml"
 
@@ -33,11 +34,16 @@ def new_values(writer, last_time_request):
         return last_time_request
 
 
-with open('test.csv', 'w') as csvfile:
+start_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+extension = ".csv"
+path = "./data/"
+
+with open(path + start_time + extension, 'w') as csvfile:
     spamwrite = csv.writer(csvfile, delimiter=' ',
                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
     while True:
+        # Peticiones periodicas de los datos
         last_time_request = new_values(writer, last_time_request)
-        time.sleep(240)
+        time.sleep(240)   # 4 minutos de espera antes de buscar nuevos datos
