@@ -10,7 +10,8 @@ url = "http://www.mc30.es/images/xml/DatosTrafico.xml"
 headers = {'headersHost': 'www.mc30.es', 'User-Agent': 'Python script', 'Accept': ' text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 'Accept-Language': 'en-US,en;q=0.5', 'Accept-Encoding': 'gzip, deflate', 'Connection': 'keep-alive'}
 
 fieldnames = ['totalVehiculosTunel', 'totalVehiculosTunelCalle30',
-              'velocidadmediaTunel', 'velocidadMediaSuperficie']
+              'velocidadmediaTunel', 'velocidadMediaSuperficie',
+              'fecha']
 
 last_time_request = ""
 
@@ -23,7 +24,8 @@ def new_values(writer, last_time_request):
     values = {'totalVehiculosTunel'        : x[0]['VALOR'],
               'totalVehiculosTunelCalle30' : x[1]['VALOR'],
               'velocidadmediaTunel'        : x[2]['VALOR'],
-              'velocidadMediaSuperficie'   : x[3]['VALOR']}
+              've3locidadMediaSuperficie'   : x[3]['VALOR'],
+              'fecha': x[0]['FECHA']}
     if (str(last_time_request) != x[0]['FECHA']):
         print("Nuevos datos de " + x[0]['FECHA'])
         print(values)
