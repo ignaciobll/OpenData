@@ -29,7 +29,7 @@ def get_new_values():
     return values
 
 
-#start_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+# start_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 name = "datasetTraficoCalle30"
 extension = ".csv"
 path = "./data/"
@@ -57,4 +57,4 @@ with open(path + name + extension, 'a') as csvfile:
             print(values)
         else:
             print("Mismos datos desde " + values['fecha'])
-        time.sleep(4)   # 4 minutos de espera antes de buscar nuevos datos
+        time.sleep(240)   # 4 minutos de espera antes de buscar nuevos datos
