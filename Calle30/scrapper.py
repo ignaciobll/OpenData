@@ -25,9 +25,8 @@ def new_values(writer, last_time_request):
               'totalVehiculosTunelCalle30' : x[1]['VALOR'],
               'velocidadmediaTunel'        : x[2]['VALOR'],
               'velocidadMediaSuperficie'   : x[3]['VALOR'],
-              'fecha': x[0]['FECHA']}
+              'fecha'                      : x[0]['FECHA']}
     if (str(last_time_request) != x[0]['FECHA']):
-        print("Nuevos datos de " + x[0]['FECHA'])
         print(values)
         writer.writerow(values)
         return x[0]['FECHA']
