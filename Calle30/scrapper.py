@@ -16,7 +16,7 @@ fieldnames = ['totalVehiculosTunel', 'totalVehiculosTunelCalle30',
 last_time_request = ""
 
 
-def new_values(writer, last_time_request):
+def get_new_values():
     r = requests.get(url, headers=headers)
     o = xmltodict.parse(r.text)
     j = json.loads(json.dumps(o))
@@ -26,25 +26,35 @@ def new_values(writer, last_time_request):
               'velocidadmediaTunel'        : x[2]['VALOR'],
               'velocidadMediaSuperficie'   : x[3]['VALOR'],
               'fecha'                      : x[0]['FECHA']}
-    if (str(last_time_request) != x[0]['FECHA']):
-        print(values)
-        writer.writerow(values)
-        return x[0]['FECHA']
-    else:
-        print("Mismos datos siendo los ultimos de " + last_time_request)
-        return last_time_request
+    return values
 
 
-start_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+#start_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+name = "datasetTraficoCalle30"
 extension = ".csv"
 path = "./data/"
 
-with open(path + start_time + extension, 'w') as csvfile:
-    spamwrite = csv.writer(csvfile, delimiter=' ',
-                           quotechar='|', quoting=csv.QUOTE_MINIMAL)
-    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-    writer.writeheader()
+
+with open(path + name + extension, 'w+') as csvfile:
+    header = csvfile.readline()
+    if (header != fieldnames):
+            spamwrite = csv.writer(csvfile, delimiter=' ',
+                                   quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+
+
+with open(path + name + extension, 'a') as csvfile:
     while True:
-        # Peticiones periodicas de los datos
-        last_time_request = new_values(writer, last_time_request)
-        time.sleep(240)   # 4 minutos de espera antes de buscar nuevos datos
+        values = get_new_values()
+        if (str(last_time_request) != values['fecha']):
+            # Peticiones periodicas de los datos
+            last_time_request = values['fecha']
+            spamwrite = csv.writer(csvfile, delimiter=' ',
+                                   quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writerow(values)
+            print(values)
+        else:
+            print("Mismos datos desde " + values['fecha'])
+        time.sleep(4)   # 4 minutos de espera antes de buscar nuevos datos
